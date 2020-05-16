@@ -13,6 +13,7 @@ It is similar to [reactAudio](https://github.com/HarshalRohit/reactAudio). <br /
 
 ## Features
 Request permission for microphone access (tested on Android). <br />
+Start/Stop recording <br />
 Disable buttons based on the recording state. <br />
 Show user various status updates while recording and uploading files. <br />
 Upload files to server using `multipart/form-data` (looking for better solutions).
