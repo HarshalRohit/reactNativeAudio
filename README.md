@@ -26,7 +26,7 @@ Special thanks to developers of following libraries <br />
 
 
 ## Environment Setup
-Follow the steps mentioned [here](https://reactnative.dev/docs/environment-setup) for react-native-cli.
+Follow the steps mentioned [here](https://reactnative.dev/docs/environment-setup) for *React Native CLI Quickstart*.
 
 ## Usage
 1. After environment setup, run `npm install` to install dependencies.
