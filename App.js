@@ -27,8 +27,48 @@ function App() {
 
   var recorder = null;
 
+  async function handleRecordBtnClick() {
+    // check and request microphone access
+    let canRecord = await requestMicrophone(); //.then(res => console.log(res));
+
+    if (canRecord) {
+      // disable record and upload btn
+      updateBtnStatus({recordBtn: true, stopBtn: false, uploadBtn: true});
+
+      // setup recorder
+      reloadRecorder();
+
+      setStatusText('Recording Started.');
+    } else {
+      // disable stop and upload btn
+      updateBtnStatus({recordBtn: false, stopBtn: true, uploadBtn: true});
+    }
+  }
+
+  const handleStopBtnClick = () => {
+    this.recorder.stop();
+
+    setStatusText('Recording Stopped.');
+
+    // this.recorder.destroy();
+    updateBtnStatus({recordBtn: false, stopBtn: true, uploadBtn: false});
+  };
+
+  async function handleUploadBtnClick() {
+    let fileExist = await RNFetchBlob.fs.exists(recordingFspath).then(exist => {
+      return exist;
+    });
+
+    if (fileExist) {
+      uploadFile();
+    } else {
+      setStatusText('File not recorded properly\nRecord Again!');
+      // updateBtnStatus({recordBtn: false, stopBtn: true, uploadBtn: true});
+    }
+  }
+
   // unified location to disable btns
-  // will modify later with proper logic
+  // will modify later with better logic based on recorder status
   const updateBtnStatus = statusObj => {
     disableRecordBtn(
       statusObj.hasOwnProperty('recordBtn')
@@ -90,10 +130,13 @@ function App() {
   }
 
   const reloadRecorder = () => {
-    if (this.recorder) {
-      this.recorder.destroy();
-      // this.recorder = null;
-    }
+    // docs mention to destroy bt
+    //  I am getting unhandled promise error
+    // if commented then works
+    // if (this.recorder) {
+    //   this.recorder.destroy();
+    //   // this.recorder = null;
+    // }
 
     const recorderConfig = {
       // bitrate: 256000,
@@ -121,33 +164,6 @@ function App() {
       });
   };
 
-  async function handleRecordBtnClick() {
-    // check and request microphone access
-    let canRecord = await requestMicrophone(); //.then(res => console.log(res));
-
-    if (canRecord) {
-      // disable record and upload btn
-      updateBtnStatus({recordBtn: true, stopBtn: false, uploadBtn: true});
-
-      // setup recorder
-      reloadRecorder();
-
-      setStatusText('Recording Started.');
-    } else {
-      // disable stop and upload btn
-      updateBtnStatus({recordBtn: false, stopBtn: true, uploadBtn: true});
-    }
-  }
-
-  const handleStopBtnClick = () => {
-    this.recorder.stop();
-
-    setStatusText('Recording Stopped.\n');
-
-    // this.recorder.destroy();
-    updateBtnStatus({recordBtn: false, stopBtn: true, uploadBtn: false});
-  };
-
   const handleRecorderError = errObj => {
     console.log(
       `Error in recorder: [err: ${errObj.err}, msg: ${errObj.message}]`,
@@ -159,6 +175,8 @@ function App() {
 
     const uploadData = RNFetchBlob.wrap(recordingFspath);
     const uploadUrl = 'http://192.168.43.226:3020/upload';
+
+    setStatusText('Uploading...');
 
     RNFetchBlob.fetch(
       'POST',
@@ -184,22 +202,9 @@ function App() {
         console.log(err);
       })
       .finally(() => {
-        updateBtnStatus({recordBtn: false, stopBtn: true, uploadBtn: true});
+        updateBtnStatus({recordBtn: false, stopBtn: true, uploadBtn: false});
       });
   };
-
-  async function handleUploadBtnClick() {
-    let fileExist = await RNFetchBlob.fs.exists(recordingFspath).then(exist => {
-      return exist;
-    });
-
-    if (fileExist) {
-      uploadFile();
-    } else {
-      setStatusText('File not recorded properly\nRecord Again!');
-      // updateBtnStatus({recordBtn: false, stopBtn: true, uploadBtn: true});
-    }
-  }
 
   return (
     <View
@@ -207,27 +212,26 @@ function App() {
         flex: 1,
         justifyContent: 'center',
         // alignItems: 'stretch',
+        padding: 10,
       }}>
       <View style={styles.statusContainer}>
         <Text style={styles.statusText}>{statusText}</Text>
       </View>
-      <View>
+      <View style={styles.btnContainer}>
         <Button
           title="Record"
           onPress={handleRecordBtnClick}
-          style={styles.buttonMargin}
           disabled={isRecordBtnDisabled}
         />
       </View>
-      <View>
+      <View style={styles.btnContainer}>
         <Button
           title="Stop"
           onPress={handleStopBtnClick}
-          style={styles.buttonMargin}
           disabled={isStopBtnDisabled}
         />
       </View>
-      <View>
+      <View style={styles.btnContainer}>
         <Button
           color="#737373"
           title="Upload"
@@ -240,111 +244,21 @@ function App() {
 }
 
 const styles = StyleSheet.create({
-  buttonMargin: {
-    margin: 20,
-    padding: 20,
+  btnContainer: {
+    padding: 5,
   },
   statusContainer: {
-    // flex: 1,
-    // marginTop: 32,
-    // paddingHorizontal: 24,
-    // padding: auto,
     alignItems: 'center',
     justifyContent: 'flex-end',
-    height: 250,
+    height: 150,
     backgroundColor: 'lavender',
-    paddingBottom: 20,
+    padding: 10,
+    margin: 5,
+    // marginBottom: 10,
   },
   statusText: {
     fontSize: 20,
   },
 });
-
-// const App: () => React$Node = () => {
-//   return (
-//     <>
-//       <StatusBar barStyle="dark-content" />
-//       <SafeAreaView>
-//         <ScrollView
-//           contentInsetAdjustmentBehavior="automatic"
-//           style={styles.scrollView}>
-//           <Header />
-//           {global.HermesInternal == null ? null : (
-//             <View style={styles.engine}>
-//               <Text style={styles.footer}>Engine: Hermes</Text>
-//             </View>
-//           )}
-//           <View style={styles.body}>
-//             <View style={styles.sectionContainer}>
-//               <Text style={styles.sectionTitle}>Step One</Text>
-//               <Text style={styles.sectionDescription}>
-//                 Edit <Text style={styles.highlight}>App.js</Text> to change this
-//                 screen and then come back to see your edits.
-//               </Text>
-//             </View>
-//             <View style={styles.sectionContainer}>
-//               <Text style={styles.sectionTitle}>See Your Changes</Text>
-//               <Text style={styles.sectionDescription}>
-//                 <ReloadInstructions />
-//               </Text>
-//             </View>
-//             <View style={styles.sectionContainer}>
-//               <Text style={styles.sectionTitle}>Debug</Text>
-//               <Text style={styles.sectionDescription}>
-//                 <DebugInstructions />
-//               </Text>
-//             </View>
-//             <View style={styles.sectionContainer}>
-//               <Text style={styles.sectionTitle}>Learn More</Text>
-//               <Text style={styles.sectionDescription}>
-//                 Read the docs to discover what to do next:
-//               </Text>
-//             </View>
-//             <LearnMoreLinks />
-//           </View>
-//         </ScrollView>
-//       </SafeAreaView>
-//     </>
-//   );
-// };
-
-// const styles2 = StyleSheet.create({
-//   scrollView: {
-//     backgroundColor: Colors.lighter,
-//   },
-//   engine: {
-//     position: 'absolute',
-//     right: 0,
-//   },
-//   body: {
-//     backgroundColor: Colors.white,
-//   },
-//   sectionContainer: {
-//     marginTop: 32,
-//     paddingHorizontal: 24,
-//   },
-//   sectionTitle: {
-//     fontSize: 24,
-//     fontWeight: '600',
-//     color: Colors.black,
-//   },
-//   sectionDescription: {
-//     marginTop: 8,
-//     fontSize: 18,
-//     fontWeight: '400',
-//     color: Colors.dark,
-//   },
-//   highlight: {
-//     fontWeight: '700',
-//   },
-//   footer: {
-//     color: Colors.dark,
-//     fontSize: 12,
-//     fontWeight: '600',
-//     padding: 4,
-//     paddingRight: 12,
-//     textAlign: 'right',
-//   },
-// });
 
 export default App;
