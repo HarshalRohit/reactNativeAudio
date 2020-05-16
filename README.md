@@ -7,10 +7,15 @@ This project is part of my attempt to learn React-Native. <br />
 It is similar to [reactAudio](https://github.com/HarshalRohit/reactAudio). <br />
 
 
+## Screenshot
+![Image](./appImage.png)
+
+
 ## Features
 Request permission for microphone access (tested on Android). <br />
 Disable buttons based on the recording state. <br />
-Show user various status updates while recording and uploading files.
+Show user various status updates while recording and uploading files. <br />
+Upload files to server using `multipart/form-data` (looking for better solutions).
 
 
 ## Third-party libraries used
@@ -23,8 +28,13 @@ Special thanks to developers of following libraries <br />
 Follow the steps mentioned [here](https://reactnative.dev/docs/environment-setup) for react-native-cli.
 
 ## Usage
-1. After environment setup, run `npm start` in the project directory.
-2. run `npx react-native run-android` in another terminal.
+1. After environment setup, run `npm install` to install dependencies.
+2. In the project directory, run `npm start` to start development server.
+3. In another terminale, run `npx react-native run-android` to run on an android device or emulator.
+
+## Note
+Server setup required, Also modify `uploadUrl` in [App.js](./App.js) accordingly. <br />
+You can use [express-try](https://github.com/HarshalRohit/express-try) specfically created for this project.
 
 
 ## License
