@@ -35,7 +35,7 @@ Follow the steps mentioned [here](https://reactnative.dev/docs/environment-setup
 
 ## Note
 Server setup required, Also modify `uploadUrl` in [App.js](./App.js) accordingly. <br />
-You can use [express-try](https://github.com/HarshalRohit/express-try) specfically created for this project.
+You can use the [server](https://github.com/HarshalRohit/express-try) specfically created for this project.
 
 
 ## License
