@@ -39,4 +39,4 @@ You can use [express-try](https://github.com/HarshalRohit/express-try) specfical
 
 
 ## License
-[MIT]
+[MIT](LICENSE)
