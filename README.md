@@ -27,7 +27,7 @@ Special thanks to developers of following libraries <br />
 
 
 ## Environment Setup
-Follow the steps mentioned [here](https://reactnative.dev/docs/environment-setup) for react-native-cli.
+Follow the steps mentioned [here](https://reactnative.dev/docs/environment-setup) for **React Native CLI Quickstart**.
 
 ## Usage
 1. After environment setup, run `npm install` to install dependencies.
@@ -52,8 +52,8 @@ which I fixed by adding the following line in `./android/src/main/AndroidManifes
 
 ## Note
 Server setup required, Also modify `uploadUrl` in [App.js](./App.js) accordingly. <br />
-You can use [express-try](https://github.com/HarshalRohit/express-try) specfically created for this project.
+You can use the [server](https://github.com/HarshalRohit/express-try) specifically created for this project.
 
 
 ## License
-[MIT]
+[MIT](LICENSE)
