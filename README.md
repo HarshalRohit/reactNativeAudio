@@ -36,19 +36,15 @@ Follow the steps mentioned [here](https://reactnative.dev/docs/environment-setup
 
 ## ISSUES
 
-+ I tried the release variant by running `npx react-native run-android --variant=release` during which I faced <br />
-the following issue: <br />
++ I tried the release variant by running `npx react-native run-android --variant=release` during which I faced the following issue:  
+`Error: CLEARTEXT communication to **** not permitted by network security policy.`  
+[Solution](https://stackoverflow.com/questions/45940861/android-8-cleartext-http-traffic-not-permitted): I fixed it by adding the following line in `./android/src/main/AndroidManifest.xml`  
 ```
-Error: CLEARTEXT communication to **** not permitted by network security policy.
+<application
+...
+android:usesCleartextTraffic="true"
+... >
 ```
-which I fixed by adding the following line in `./android/src/main/AndroidManifest.xml`
-```
-    <application 
-    ...
-    android:usesCleartextTraffic="true"
-    ...>
-```
-[Reference](https://stackoverflow.com/questions/45940861/android-8-cleartext-http-traffic-not-permitted)
 
 ## Note
 Server setup required, Also modify `uploadUrl` in [App.js](./App.js) accordingly. <br />
