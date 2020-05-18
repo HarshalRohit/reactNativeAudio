@@ -33,6 +33,22 @@ Follow the steps mentioned [here](https://reactnative.dev/docs/environment-setup
 2. In the project directory, run `npm start` to start development server.
 3. In another terminale, run `npx react-native run-android` to run on an android device or emulator.
 
+## ISSUES
+
++ I tried the release variant by running `npx react-native run-android --variant=release` during which I faced <br />
+the following issue: <br />
+```
+Error: CLEARTEXT communication to **** not permitted by network security policy.
+```
+which I fixed by adding the following line in `./android/src/main/AndroidManifest.xml`
+```
+    <application 
+    ...
+    android:usesCleartextTraffic="true"
+    ...>
+```
+[Reference](https://stackoverflow.com/questions/45940861/android-8-cleartext-http-traffic-not-permitted)
+
 ## Note
 Server setup required, Also modify `uploadUrl` in [App.js](./App.js) accordingly. <br />
 You can use [express-try](https://github.com/HarshalRohit/express-try) specfically created for this project.
