@@ -47,8 +47,7 @@ android:usesCleartextTraffic="true"
 ```
 
 ## Note
-Server setup required, Also modify `uploadUrl` in [App.js](./App.js) accordingly. <br />
-You can use the [server](https://github.com/HarshalRohit/express-try) specifically created for this project.
+Server setup required,  you can use the [server](https://github.com/HarshalRohit/express-try) specifically created for this project.
 
 
 ## License
